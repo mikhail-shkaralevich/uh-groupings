@@ -75,6 +75,7 @@ const AfterLogin = async ()=>{
                                     alt="user-solid"
                                     width={56}
                                     height={64}
+                                    // sizes="(max-width: 576px) 210px, (max-width: 768px) 285px, 338px"
                                 />
                                 <div
                                     className="bg-blue-background rounded-full flex justify-center
