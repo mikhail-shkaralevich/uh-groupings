@@ -21,10 +21,12 @@ import {
 } from '@/lib/fetchers';
 import * as NextCasClient from 'next-cas-client/app';
 import * as Actions from '@/lib/actions';
+import * as JwtService from '@/lib/jwt-service'
 import { vi, describe, beforeAll, it, expect } from 'vitest';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_2_1_BASE_URL as string;
 const testUser: User = JSON.parse(process.env.TEST_USER_A as string);
+const testJwtToken = process.env.JWT_SECRET_KEY as string;
 
 vi.mock('next-cas-client/app');
 vi.mock('@/lib/actions');
@@ -44,6 +46,7 @@ describe('fetchers', () => {
 
     beforeAll(() => {
         vi.spyOn(NextCasClient, 'getCurrentUser').mockResolvedValue(testUser);
+        vi.spyOn(JwtService, 'generateJWT').mockResolvedValue(testJwtToken);
         vi.spyOn(Actions, 'sendStackTrace');
     });
 
@@ -51,7 +54,7 @@ describe('fetchers', () => {
         it('should make a GET request at the correct endpoint', async () => {
             await getAllGroupings();
             expect(fetch).toHaveBeenCalledWith(`${baseUrl}/groupings`, {
-                headers: { current_user: currentUser.uid }
+                headers: { Authorization: `Bearer ${testJwtToken}` }
             });
         });
 

@@ -1,4 +1,4 @@
-import { getRequest } from './http-client';
+import { getRequest, getServiceRequest } from './http-client';
 import {
     Announcements,
     GroupingDescription,
@@ -175,7 +175,7 @@ export const isSoleOwner = async (uhIdentifier: string, groupingPath: string): P
  */
 export const isOwner = async (uhIdentifier: string): Promise<boolean> => {
     const endpoint = `${baseUrl}/members/${uhIdentifier}/is-owner`;
-    return getRequest<boolean>(endpoint);
+    return getServiceRequest<boolean>(endpoint);
 };
 
 /**
@@ -200,7 +200,7 @@ export const isGroupingOwner = async (groupingPath: string, uhIdentifier: string
  */
 export const isAdmin = async (uhIdentifier: string): Promise<boolean> => {
     const endpoint = `${baseUrl}/members/${uhIdentifier}/is-admin`;
-    return getRequest<boolean>(endpoint);
+    return getServiceRequest<boolean>(endpoint);
 };
 
 /**

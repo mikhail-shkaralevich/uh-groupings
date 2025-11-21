@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { generateJWT } from './jwt-service'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_2_1_BASE_URL as string;
+const serviceApiKey = process.env.GROUPINGS_API_SERVICE_KEY as string;
 
 enum HTTPMethod {
     GET = 'GET',
@@ -57,6 +58,20 @@ const poll = async <T>(jobId: number): Promise<T> => {
 export const getRequest = async <T>(endpoint: string): Promise<T> => {
     const jwtToken = await generateJWT();
     return await fetch(endpoint, { headers: { Authorization: `Bearer ${jwtToken}` } })
+        .then((res) => handleFetch(res, HTTPMethod.GET))
+        .catch((err) => err);
+};
+
+/**
+ * Perform a GET request to the specified URL using service API key authentication.
+ * Used for service-to-service communication during role checking.
+ *
+ * @param endpoint - the URL to perform the request on
+ *
+ * @returns The promise of type T
+ */
+export const getServiceRequest = async <T>(endpoint: string): Promise<T> => {
+    return await fetch(endpoint, { headers: { 'X-Service-API-Key': serviceApiKey } })
         .then((res) => handleFetch(res, HTTPMethod.GET))
         .catch((err) => err);
 };

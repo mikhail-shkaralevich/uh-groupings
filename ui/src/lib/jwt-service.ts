@@ -28,10 +28,6 @@ export const generateJWT = async (): Promise<string> => {
 
     const user = await getUser();
 
-    if (user.roles.includes(Role.ANONYMOUS) && user.roles.length === 1) {
-        throw new Error('Cannot generate JWT for anonymous user');
-    }
-
     const secretBuffer = getSecretKeyBuffer();
 
     if (!JWT_EXPIRATION) {
